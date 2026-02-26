@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MobiCloud PC - Desktop Virtual</title>
+    <style>
+        :root { --primary: #0078d7; --taskbar: rgba(20, 20, 20, 0.9); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        
+        /* Papel de Parede */
+        #desktop {
+            width: 100%; height: 100%;
+            background: url('https://images.wallpaperscraft.com/image/single/mountain_peak_sky_141151_1920x1080.jpg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+
+        /* Ícones do Desktop */
+        .icon-grid { display: grid; grid-template-rows: repeat(auto-fill, 90px); gap: 10px; padding: 15px; width: 100px; }
+        
+        .icon {
+            width: 80px; text-align: center; color: white; cursor: pointer;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8); transition: 0.2s;
+        }
+        .icon:hover { background: rgba(255,255,255,0.15); border-radius: 5px; }
+        .icon-img { font-size: 35px; display: block; margin-bottom: 5px; }
+        .icon-text { font-size: 12px; font-weight: 500; }
+
+        /* Janelas Estilizadas */
+        .window {
+            position: absolute; width: 90%; height: 75%;
+            background: #f3f3f3; border-radius: 8px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            display: none; flex-direction: column;
+            top: 45%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 10; border: 1px solid #999;
+        }
+
+        .window-header {
+            background: #fff; padding: 10px 15px;
+            display: flex; justify-content: space-between;
+            align-items: center; border-radius: 8px 8px 0 0;
+        }
+
+        .win-title { font-size: 13px; font-weight: 600; color: #333; }
+        
+        .controls { display: flex; gap: 10px; }
+        .btn { width: 12px; height: 12px; border-radius: 50%; border: none; cursor: pointer; }
+        .close { background: #ff5f56; } .min { background: #ffbd2e; } .max { background: #27c93f; }
+
+        /* Corpo da Janela (Iframe do PC Real) */
+        .window-body { flex: 1; border: none; background: #000; }
+
+        /* Barra de Tarefas */
+        #taskbar {
+            position: absolute; bottom: 0; width: 100%;
+            height: 48px; background: var(--taskbar);
+            backdrop-filter: blur(12px); display: flex; align-items: center;
+            padding: 0 12px; border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
+        }
+
+        .start-btn { 
+            font-size: 22px; cursor: pointer; padding: 5px 10px;
+            transition: 0.3s; filter: drop-shadow(0 0 5px #00a2ed);
+        }
+        .start-btn:hover { transform: scale(1.1); }
+
+        .time { margin-left: auto; color: white; font-size: 12px; text-align: right; }
+    </style>
+</head>
+<body>
+
+<div id="desktop">
+    <div class="icon-grid">
+        <div class="icon" onclick="openWindow('https://webvm.io/', 'Meu PC Virtual')">
+            <span class="icon-img">💻</span>
+            <span class="icon-text">Meu PC</span>
+        </div>
+
+        <div class="icon" onclick="openWindow('https://www.google.com/search?igu=1', 'Navegador Web')">
+            <span class="icon-img">🌍</span>
+            <span class="icon-text">Internet</span>
+        </div>
+    </div>
+
+    <div class="window" id="appWindow">
+        <div class="window-header">
+            <span class="win-title" id="windowTitle">MobiCloud PC</span>
+            <div class="controls">
+                <div class="btn min"></div>
+                <div class="btn max"></div>
+                <button class="btn close" onclick="closeWindow()"></button>
+            </div>
+        </div>
+        <iframe src="" class="window-body" id="appIframe"></iframe>
+    </div>
+
+    <div id="taskbar">
+        <div class="start-btn" onclick="alert('Menu Iniciar MobiCloud v1.0')">🔹</div>
+        <div style="color: white; font-size: 13px; margin-left: 10px; opacity: 0.7;">MobiCloud PC</div>
+        
+        <div class="time" id="clock">
+            12:00<br>26/02/2026
+        </div>
+    </div>
+</div>
+
+<script>
+    function openWindow(url, title) {
+        const win = document.getElementById('appWindow');
+        const frame = document.getElementById('appIframe');
+        const titleEl = document.getElementById('windowTitle');
+        
+        titleEl.innerText = title;
+        frame.src = url;
+        win.style.display = 'flex';
+    }
+
+    function closeWindow() {
+        document.getElementById('appWindow').style.display = 'none';
+        document.getElementById('appIframe').src = '';
+    }
+
+    // Relógio em tempo real
+    function updateClock() {
+        const now = new Date();
+        const time = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const date = now.toLocaleDateString();
+        document.getElementById('clock').innerHTML = `${time}<br>${date}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+
+</body>
+</html>
