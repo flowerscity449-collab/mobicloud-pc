@@ -1,0 +1,12 @@
+{
+  "name": "mobicloud-pc",
+  "version": "1.0.0",
+  "description": "PC Virtual na Nuvem",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
